@@ -96,7 +96,10 @@ private fun getWifiInfo(context: Context) {
     ) {
         // If all permissions are granted, Proceed
 //        wifiManager.scanResults
-        Log.d(TAG, "getWifiInfo: ${wifiManager.scanResults}")
+//        Log.d(TAG, "getWifiInfo: ${wifiManager.scanResults}")
+        val wifiInfo = wifiManager.connectionInfo
+        val bssid = wifiInfo.bssid
+        Log.d(TAG, "getWifiInfo: BSSID=$bssid")
     }
     else{
         requestPermission(ctx)

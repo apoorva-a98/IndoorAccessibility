@@ -3,6 +3,7 @@ package com.example.indooracess
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.SensorManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -26,6 +27,8 @@ import kotlin.math.log
 
 val TAG : String = "WIFI"
 lateinit var ctx: Context
+private val TAG = "MAIN"
+private lateinit var  sensorManager: SensorManager
 
 class MainActivity : ComponentActivity() {
 

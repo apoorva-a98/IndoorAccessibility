@@ -28,7 +28,7 @@ import kotlin.math.log
 
 val TAG : String = "WIFI"
 lateinit var ctx: Context
-private val TAG = "MAIN"
+private val TAG1 = "MAIN"
 private lateinit var  sensorManager: SensorManager
 
 class MainActivity : ComponentActivity() {
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
         deviceSensors.forEach {
             // the '$' inside the quotes allows one to insert a variable into the string
             // String Templates - https://kotlinlang.org/docs/strings.html#string-templates
-            Log.d(TAG, "Device Sensor:$it ")
+            Log.d(TAG1, "Device Sensor:$it ")
         }
 
         //End of SensorManager: Magnetometer Block

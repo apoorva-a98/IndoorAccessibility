@@ -80,7 +80,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
         // Todo cleaned this up by placing it in it's own function
         listSensors(sensorManager = sensorManager)
-        directionVector = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+//        directionVector = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        directionVector = sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)
         /*In Android, the TYPE_MAGNETIC_FIELD sensor is typically used to measure the Earth's magnetic field, which can be used to determine the device's orientation and direction.
         The TYPE_ORIENTATION sensor was deprecated in API level 3 and is not recommended for use. The TYPE_GEOMAGNETIC_ROTATION_VECTOR and TYPE_MAGNETIC_FIELD_UNCALIBRATED sensors are alternative options that provide more advanced features, such as higher accuracy or uncalibrated readings, but are not necessary for basic compass functionality.
         Therefore, the recommended sensor to use for a compass application in Android is the TYPE_MAGNETIC_FIELD sensor.*/
@@ -109,7 +110,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
         getWifiInfo(this)
 
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        58override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
             Log.d(TAG, "onAccuracyChanged: DO Something")
         }
         /* This observer function is listening for changes in value, once you register the listener above, it will
@@ -128,6 +129,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 val dy = event.values[1];
                 val dz = event.values[2];
 
+                var toDegrees : Double = Math.toDegrees(dz.toDouble())
+                Log.d(TAG, "x: ${dx} y: ${dy} z: ${toDegrees}")
+
                 // Calculate total magnetic field strength (in microtesla)
 //            val magnetic_field : Double = sqrt((dx * dx + dy * dy + dz * dz).toDouble())
 
@@ -135,8 +139,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 val inclination_angle = kotlin.math.atan(dy / kotlin.math.sqrt((dx * dx + dz * dz).toDouble()))
 
                 // Calculate azimuth angle (in degrees)
-                val compassAngle = ((360 + kotlin.math.atan(dx / (dy * kotlin.math.sin(inclination_angle) + dz * kotlin.math.cos(inclination_angle)))) % 360 - magneticDeclination)
-                Log.d(TAG, compassAngle.toString())
+                compassAngle = ((360 + kotlin.math.atan(dx / (dy * kotlin.math.sin(inclination_angle) + dz * kotlin.math.cos(inclination_angle))) % 360 - magneticDeclination).toFloat())
+//                Log.d(TAG, compassAngle.toString())
             }
         }
 
@@ -144,7 +148,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         Activity Lifecycle - https://developer.android.com/guide/components/activities/activity-lifecycle
         When the app is in the background it is paused. onPause, therefore we stop listening to the sensor.
          */
-        */
         override fun onPause() {
             super.onPause()
             sensorManager.unregisterListener(this)
@@ -154,8 +157,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
          */
         override fun onResume() {
             super.onResume()
-            directionVector?.also { direcVec ->
-                sensorManager.registerListener(this, direcVec, SensorManager.SENSOR_DELAY_NORMAL)
+            directionVector.also { directionVector ->
+                sensorManager.registerListener(this, directionVector, SensorManager.SENSOR_DELAY_NORMAL)
             }
         }
     }
@@ -163,6 +166,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     override fun onSensorChanged(p0: SensorEvent?) {
         TODO("Not yet implemented")
     }
+
 }
 var bssid: String = "";
 var ssid: String = "";
